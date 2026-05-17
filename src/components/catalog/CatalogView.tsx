@@ -1,0 +1,120 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { ProductCard } from "@/components/product/ProductCard";
+import { useLocale } from "@/components/providers/LocaleProvider";
+import { filterProducts } from "@/lib/products";
+import type { Category } from "@/types";
+
+const categories: (Category | "")[] = ["", "food", "crafts", "clothing", "home"];
+
+export function CatalogView() {
+  const searchParams = useSearchParams();
+  const { t } = useLocale();
+
+  const initialCategory = (searchParams.get("category") as Category) || "";
+  const [category, setCategory] = useState<Category | "">(
+    categories.includes(initialCategory) ? initialCategory : "",
+  );
+  const [maxPrice, setMaxPrice] = useState("");
+  const [district, setDistrict] = useState("");
+
+  const filtered = useMemo(
+    () =>
+      filterProducts({
+        category: category || null,
+        maxPrice: maxPrice ? Number(maxPrice) : null,
+        district: district || null,
+      }),
+    [category, maxPrice, district],
+  );
+
+  const reset = () => {
+    setCategory("");
+    setMaxPrice("");
+    setDistrict("");
+  };
+
+  return (
+    <div className="flex flex-col gap-8 lg:flex-row">
+      <aside className="lg:w-64 lg:shrink-0">
+        <div className="rounded-2xl border border-gold/25 bg-white p-5">
+          <h2 className="mb-4 font-semibold text-ink">{t.catalog.filters}</h2>
+
+          <label className="mb-4 block">
+            <span className="mb-1.5 block text-xs font-medium text-ink-muted">
+              {t.catalog.allCategories}
+            </span>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value as Category | "")}
+              className="w-full rounded-xl border border-gold/40 bg-cream px-3 py-2 text-sm text-ink focus:border-terracotta focus:outline-none"
+            >
+              <option value="">{t.catalog.allCategories}</option>
+              {(["food", "crafts", "clothing", "home"] as Category[]).map(
+                (cat) => (
+                  <option key={cat} value={cat}>
+                    {t.categoryLabels[cat]}
+                  </option>
+                ),
+              )}
+            </select>
+          </label>
+
+          <label className="mb-4 block">
+            <span className="mb-1.5 block text-xs font-medium text-ink-muted">
+              {t.catalog.maxPrice}
+            </span>
+            <input
+              type="number"
+              min={0}
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              placeholder="50000"
+              className="w-full rounded-xl border border-gold/40 bg-cream px-3 py-2 text-sm text-ink focus:border-terracotta focus:outline-none"
+            />
+          </label>
+
+          <label className="mb-4 block">
+            <span className="mb-1.5 block text-xs font-medium text-ink-muted">
+              {t.catalog.district}
+            </span>
+            <input
+              type="text"
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
+              placeholder={t.catalog.districtPlaceholder}
+              className="w-full rounded-xl border border-gold/40 bg-cream px-3 py-2 text-sm text-ink focus:border-terracotta focus:outline-none"
+            />
+          </label>
+
+          <button
+            type="button"
+            onClick={reset}
+            className="w-full rounded-xl border border-gold/40 py-2 text-sm font-medium text-ink-muted transition-colors hover:bg-cream"
+          >
+            {t.catalog.reset}
+          </button>
+        </div>
+      </aside>
+
+      <div className="min-w-0 flex-1">
+        <p className="mb-4 text-sm text-ink-muted">
+          {filtered.length} {t.catalog.results}
+        </p>
+        {filtered.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-gold/40 bg-white py-16 text-center text-ink-muted">
+            {t.catalog.empty}
+          </p>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {filtered.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
