@@ -21,7 +21,7 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
   const [error, setError] = useState<string | null>(null);
 
   const { active: useSupabase } = useSupabaseBackend();
-  const showStripe = stripeEnabled && !useSupabase;
+  const showStripe = stripeEnabled;
 
   if (!ready) {
     return (
@@ -88,15 +88,18 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
     setLoading("stripe");
     setError(null);
     try {
-      const order = await createOrderLocal({
-        buyerId: user?.id ?? "guest",
-        buyerEmail: user?.email ?? "guest@shuk.am",
-        buyerName: user?.name ?? "Guest",
-        lines,
-        paymentMethod: "stripe",
-        status: "pending",
-      });
-      sessionStorage.setItem("shuk-last-order", order.id);
+      if (!useSupabase) {
+        const order = await createOrderLocal({
+          buyerId: user?.id ?? "guest",
+          buyerEmail: user?.email ?? "guest@shuk.am",
+          buyerName: user?.name ?? "Guest",
+          lines,
+          paymentMethod: "stripe",
+          status: "pending",
+        });
+        sessionStorage.setItem("shuk-last-order", order.id);
+      }
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -110,6 +113,9 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
           setError(data.message ?? "Checkout failed");
         }
         return;
+      }
+      if (data.orderId) {
+        sessionStorage.setItem("shuk-last-order", data.orderId);
       }
       if (data.url) {
         window.location.href = data.url;

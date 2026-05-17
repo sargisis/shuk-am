@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import { TELEGRAM_URL } from "@/lib/constants";
+import {
+  createSupabaseOrder,
+  resolveLinesFromCartItems,
+} from "@/lib/orders/create-supabase-order.server";
 import { isStripeConfigured } from "@/lib/payments/config";
 import {
   buildTelegramOrderMessage,
   resolveCartItems,
 } from "@/lib/payments/resolve-cart";
 import { createStripeCheckoutSession } from "@/lib/payments/stripe.server";
+import { isSupabaseBackend } from "@/lib/supabase/ready";
 import type { CartItem, PaymentProviderId } from "@/types/cart";
 import type { Locale } from "@/types";
 
@@ -52,8 +57,21 @@ export async function POST(request: Request) {
     }
 
     try {
+      let orderId: string | undefined;
+
+      if (await isSupabaseBackend()) {
+        const dbLines = await resolveLinesFromCartItems(items);
+        if (dbLines.length === 0) {
+          return NextResponse.json({ error: "No valid products" }, { status: 400 });
+        }
+        const order = await createSupabaseOrder(dbLines, {
+          paymentMethod: "stripe",
+        });
+        orderId = order.orderId;
+      }
+
       const url = await createStripeCheckoutSession(lines, locale);
-      return NextResponse.json({ url, provider: "stripe" });
+      return NextResponse.json({ url, provider: "stripe", orderId });
     } catch (err) {
       console.error("[checkout/stripe]", err);
       return NextResponse.json(
