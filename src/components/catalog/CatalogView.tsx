@@ -45,7 +45,7 @@ export function CatalogView() {
   return (
     <div className="flex flex-col gap-8 lg:flex-row">
       <aside className="lg:w-64 lg:shrink-0">
-        <div className="rounded-2xl border border-gold/25 bg-white p-5">
+        <div className="surface-card sticky top-24 p-5">
           <h2 className="mb-4 font-semibold text-ink">{t.catalog.filters}</h2>
 
           <label className="mb-4 block">
@@ -55,7 +55,7 @@ export function CatalogView() {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as Category | "")}
-              className="w-full rounded-xl border border-gold/40 bg-cream px-3 py-2 text-sm text-ink focus:border-terracotta focus:outline-none"
+              className="input-field text-sm"
             >
               <option value="">{t.catalog.allCategories}</option>
               {(["food", "crafts", "clothing", "home"] as Category[]).map(
@@ -78,7 +78,7 @@ export function CatalogView() {
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
               placeholder="50000"
-              className="w-full rounded-xl border border-gold/40 bg-cream px-3 py-2 text-sm text-ink focus:border-terracotta focus:outline-none"
+              className="input-field text-sm"
             />
           </label>
 
@@ -91,7 +91,7 @@ export function CatalogView() {
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
               placeholder={t.catalog.districtPlaceholder}
-              className="w-full rounded-xl border border-gold/40 bg-cream px-3 py-2 text-sm text-ink focus:border-terracotta focus:outline-none"
+              className="input-field text-sm"
             />
           </label>
 

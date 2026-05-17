@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { useLocale } from "@/components/providers/LocaleProvider";
-import { CATEGORY_ICONS } from "@/lib/constants";
+import { CATEGORY_ICONS, CATEGORY_STYLES } from "@/lib/constants";
 import type { Category } from "@/types";
 
 const categories: Category[] = ["food", "crafts", "clothing", "home"];
@@ -12,30 +13,38 @@ export function Categories() {
 
   return (
     <section>
-      <div className="mb-6 flex items-end justify-between gap-4">
-        <h2 className="text-2xl font-bold text-ink">{t.categories.title}</h2>
-        <Link
-          href="/catalog"
-          className="text-sm font-semibold text-terracotta hover:underline"
-        >
-          {t.categories.viewAll} →
-        </Link>
-      </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-        {categories.map((cat) => (
-          <Link
-            key={cat}
-            href={`/catalog?category=${cat}`}
-            className="flex flex-col items-center gap-2 rounded-2xl border border-gold/30 bg-white p-5 text-center transition-all hover:border-terracotta/40 hover:shadow-md"
-          >
-            <span className="text-3xl" role="img" aria-hidden>
-              {CATEGORY_ICONS[cat]}
-            </span>
-            <span className="font-semibold text-ink">
-              {t.categories[cat]}
-            </span>
+      <SectionHeader
+        eyebrow="Shuk.am"
+        title={t.categories.title}
+        action={
+          <Link href="/catalog" className="link-arrow">
+            {t.categories.viewAll}
+            <span aria-hidden>→</span>
           </Link>
-        ))}
+        }
+      />
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {categories.map((cat) => {
+          const style = CATEGORY_STYLES[cat];
+          return (
+            <Link
+              key={cat}
+              href={`/catalog?category=${cat}`}
+              className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 text-center ring-1 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card)] ${style.gradient} ${style.ring}`}
+            >
+              <span
+                className="relative z-10 text-4xl transition-transform duration-300 group-hover:scale-110"
+                role="img"
+                aria-hidden
+              >
+                {CATEGORY_ICONS[cat]}
+              </span>
+              <span className="relative z-10 mt-3 block font-semibold text-ink">
+                {t.categories[cat]}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </section>
   );

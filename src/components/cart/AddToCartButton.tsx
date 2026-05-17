@@ -27,8 +27,8 @@ export function AddToCartButton({
       type="button"
       className={`${base} ${
         added
-          ? "bg-ink/10 text-ink"
-          : "bg-wheat text-ink hover:bg-gold/50 border border-gold/40"
+          ? "bg-terracotta/15 text-terracotta ring-1 ring-terracotta/30"
+          : "bg-ink text-white shadow-sm hover:bg-terracotta-dark"
       } ${className}`}
       onClick={(e) => {
         e.preventDefault();

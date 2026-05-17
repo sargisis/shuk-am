@@ -1,16 +1,19 @@
 import Link from "next/link";
+import { PageContainer } from "@/components/layout/PageContainer";
 
 export default function NotFound() {
   return (
-    <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-24 text-center">
-      <p className="text-6xl font-bold text-terracotta">404</p>
-      <p className="mt-4 text-ink-muted">Страница не найдена</p>
+    <PageContainer className="flex min-h-[50vh] flex-col items-center justify-center text-center">
+      <p className="font-display text-8xl font-semibold text-terracotta/90">
+        404
+      </p>
+      <p className="mt-4 text-lg text-ink-muted">Страница не найдена</p>
       <Link
         href="/"
-        className="mt-6 rounded-xl bg-terracotta px-5 py-2.5 text-sm font-semibold text-white hover:bg-terracotta-dark"
+        className="mt-8 inline-flex rounded-2xl bg-gradient-to-b from-terracotta to-terracotta-dark px-6 py-3 text-sm font-semibold text-white shadow-md shadow-terracotta/25 transition-all hover:shadow-lg"
       >
         На главную
       </Link>
-    </div>
+    </PageContainer>
   );
 }

@@ -1,37 +1,51 @@
 "use client";
 
+import type { ReactNode } from "react";
+import { PageTitle } from "@/components/layout/PageContainer";
 import { useLocale } from "@/components/providers/LocaleProvider";
+
+function InfoArticle({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <article className="surface-card max-w-2xl p-8 sm:p-10">
+      <PageTitle title={title} />
+      <div className="prose prose-ink mt-2 text-ink-muted">{children}</div>
+    </article>
+  );
+}
 
 export function AboutPage() {
   const { t } = useLocale();
   return (
-    <article className="mx-auto max-w-2xl space-y-4">
-      <h1 className="text-3xl font-bold text-ink">{t.pages.aboutTitle}</h1>
-      <p className="leading-relaxed text-ink-muted">{t.pages.aboutText}</p>
-    </article>
+    <InfoArticle title={t.pages.aboutTitle}>
+      <p className="leading-relaxed">{t.pages.aboutText}</p>
+    </InfoArticle>
   );
 }
 
 export function DeliveryPage() {
   const { t } = useLocale();
   return (
-    <article className="mx-auto max-w-2xl space-y-4">
-      <h1 className="text-3xl font-bold text-ink">{t.pages.deliveryTitle}</h1>
-      <p className="leading-relaxed text-ink-muted">{t.pages.deliveryText}</p>
-    </article>
+    <InfoArticle title={t.pages.deliveryTitle}>
+      <p className="leading-relaxed">{t.pages.deliveryText}</p>
+    </InfoArticle>
   );
 }
 
 export function HowToOrderPage() {
   const { t } = useLocale();
   return (
-    <article className="mx-auto max-w-2xl space-y-4">
-      <h1 className="text-3xl font-bold text-ink">{t.pages.howToOrderTitle}</h1>
-      <ol className="list-decimal space-y-2 pl-5 text-ink-muted">
+    <InfoArticle title={t.pages.howToOrderTitle}>
+      <ol className="list-decimal space-y-3 pl-5 leading-relaxed">
         {t.pages.howToOrderSteps.map((step) => (
           <li key={step}>{step}</li>
         ))}
       </ol>
-    </article>
+    </InfoArticle>
   );
 }

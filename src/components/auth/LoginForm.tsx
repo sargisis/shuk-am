@@ -34,7 +34,7 @@ export function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto max-w-md space-y-4 rounded-2xl border border-gold/25 bg-white p-8"
+      className="surface-card-elevated mx-auto max-w-md space-y-4 p-8 sm:p-10"
     >
       <h1 className="text-2xl font-bold text-ink">{t.auth.loginTitle}</h1>
       <p className="text-sm text-ink-muted">{t.auth.demoNote}</p>
@@ -50,7 +50,7 @@ export function LoginForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
+          className="input-field mt-1"
         />
       </label>
       <label className="block">
@@ -61,7 +61,7 @@ export function LoginForm() {
           minLength={4}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
+          className="input-field mt-1"
         />
       </label>
       <Button type="submit" className="w-full" disabled={submitting}>

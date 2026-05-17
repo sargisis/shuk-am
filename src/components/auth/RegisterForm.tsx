@@ -46,7 +46,7 @@ export function RegisterForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto max-w-md space-y-4 rounded-2xl border border-gold/25 bg-white p-8"
+      className="surface-card-elevated mx-auto max-w-md space-y-4 p-8 sm:p-10"
     >
       <h1 className="text-2xl font-bold text-ink">{t.auth.registerTitle}</h1>
       <p className="text-sm text-ink-muted">{t.auth.demoNote}</p>
@@ -77,7 +77,7 @@ export function RegisterForm() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
+          className="input-field mt-1"
         />
       </label>
       <label className="block">
@@ -87,7 +87,7 @@ export function RegisterForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
+          className="input-field mt-1"
         />
       </label>
       <label className="block">
@@ -98,7 +98,7 @@ export function RegisterForm() {
           minLength={6}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
+          className="input-field mt-1"
         />
       </label>
       <label className="block">
@@ -106,7 +106,7 @@ export function RegisterForm() {
         <input
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
+          className="input-field mt-1"
         />
       </label>
       {role === "seller" && (
@@ -116,7 +116,7 @@ export function RegisterForm() {
             required
             value={shopName}
             onChange={(e) => setShopName(e.target.value)}
-            className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
+            className="input-field mt-1"
           />
         </label>
       )}
