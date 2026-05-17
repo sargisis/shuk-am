@@ -11,6 +11,7 @@ const ru: Dictionary = {
     catalog: "Каталог",
     sell: "Продавать",
     order: "Заказать",
+    cart: "Корзина",
   },
   hero: {
     title: "Армянский рынок — у вас дома",
@@ -64,9 +65,36 @@ const ru: Dictionary = {
   product: {
     seller: "Продавец",
     district: "Район",
-    buy: "Купить",
+    buy: "Заказать в Telegram",
+    addToCart: "В корзину",
     back: "Назад в каталог",
     notFound: "Товар не найден",
+  },
+  cart: {
+    title: "Корзина",
+    empty: "Корзина пуста",
+    emptyCta: "Смотреть каталог",
+    total: "Итого",
+    quantity: "Кол-во",
+    remove: "Удалить",
+    clear: "Очистить",
+    payStripe: "Оплатить картой (Stripe test)",
+    payStripeHint: "Тестовый режим",
+    payTelegram: "Оформить в Telegram",
+    stripeTestNote:
+      "Stripe test — цена в USD для теста. Позже заменим на ArCa / IDram.",
+    stripeNotConfigured:
+      "Добавьте ключи Stripe в .env.local (см. README)",
+    processing: "Загрузка…",
+    continueShopping: "Продолжить покупки",
+  },
+  checkout: {
+    successTitle: "Спасибо за заказ",
+    successText: "Оплата прошла (или проверяется). Мы свяжемся с вами.",
+    cancelTitle: "Оплата отменена",
+    cancelText: "Можно попробовать снова или оформить заказ в Telegram.",
+    backToCart: "В корзину",
+    backHome: "На главную",
   },
   sell: {
     title: "Продавайте на Shuk.am",
