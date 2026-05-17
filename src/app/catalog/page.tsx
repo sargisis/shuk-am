@@ -2,16 +2,12 @@
 
 import { Suspense } from "react";
 import { CatalogView } from "@/components/catalog/CatalogView";
+import { PageContainer, PageTitle } from "@/components/layout/PageContainer";
 import { useLocale } from "@/components/providers/LocaleProvider";
 
 function CatalogHeader() {
   const { t } = useLocale();
-  return (
-    <div className="mb-8">
-      <h1 className="text-3xl font-bold text-ink">{t.catalog.title}</h1>
-      <p className="mt-1 text-ink-muted">{t.catalog.subtitle}</p>
-    </div>
-  );
+  return <PageTitle title={t.catalog.title} subtitle={t.catalog.subtitle} />;
 }
 
 function CatalogFallback() {
@@ -24,11 +20,11 @@ function CatalogFallback() {
 
 export default function CatalogPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <PageContainer>
       <CatalogHeader />
       <Suspense fallback={<CatalogFallback />}>
         <CatalogView />
       </Suspense>
-    </div>
+    </PageContainer>
   );
 }

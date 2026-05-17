@@ -10,7 +10,7 @@ export function SellPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <div className="rounded-3xl border border-gold/25 bg-white p-8 sm:p-12 text-center">
+      <div className="surface-card-elevated p-8 text-center sm:p-12">
         <span className="text-4xl" role="img" aria-hidden>
           🏪
         </span>

@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Noto_Sans, Noto_Sans_Armenian } from "next/font/google";
+import { Fraunces, Noto_Sans, Noto_Sans_Armenian } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { CartProvider } from "@/components/providers/CartProvider";
 import { LocaleProvider } from "@/components/providers/LocaleProvider";
 import "./globals.css";
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const notoSans = Noto_Sans({
   variable: "--font-noto",
@@ -39,7 +45,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${notoSans.variable} ${notoArmenian.variable} h-full`}
+      className={`${fraunces.variable} ${notoSans.variable} ${notoArmenian.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col antialiased">
