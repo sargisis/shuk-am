@@ -11,6 +11,7 @@ const hy: Dictionary = {
     catalog: "Կատալոգ",
     sell: "Վաճառել",
     order: "Պատվիրել",
+    cart: "Զամբյուղ",
   },
   hero: {
     title: "Հայկական շուկան՝ ձեր տանը",
@@ -64,9 +65,36 @@ const hy: Dictionary = {
   product: {
     seller: "Վաճառող",
     district: "Շրջան",
-    buy: "Պատվիրել",
+    buy: "Պատվիրել Telegram",
+    addToCart: "Զամբյուղ",
     back: "Հետ կատալոգ",
     notFound: "Ապրանքը չի գտնվել",
+  },
+  cart: {
+    title: "Զամբյուղ",
+    empty: "Զամբյուղը դատարկ է",
+    emptyCta: "Դիտել կատալոգը",
+    total: "Ընդամենը",
+    quantity: "Քանակ",
+    remove: "Հեռացնել",
+    clear: "Մաքրել",
+    payStripe: "Վճարել քարտով (Stripe test)",
+    payStripeHint: "Փորձարկման ռեժիմ",
+    payTelegram: "Պատվիրել Telegram-ում",
+    stripeTestNote:
+      "Stripe test — գինը USD-ով է փորձարկման համար։ Ապագայում՝ ArCa / IDram։",
+    stripeNotConfigured:
+      "Ավելացրեք Stripe բանալիները .env.local-ում (տես README)",
+    processing: "Բեռնվում է…",
+    continueShopping: "Շարունակել գնումները",
+  },
+  checkout: {
+    successTitle: "Շնորհավորում ենք",
+    successText: "Վճարումը հաջող էր (կամ ստուգվում է)։ Կկապվենք ձեզ հետ։",
+    cancelTitle: "Վճարումը չեղարկված է",
+    cancelText: "Դուք կարող եք փորձել կրկին կամ պատվիրել Telegram-ում։",
+    backToCart: "Զամբյուղ",
+    backHome: "Գլխավոր",
   },
   sell: {
     title: "Վաճառեք Shuk.am-ում",

@@ -10,6 +10,7 @@ export interface Dictionary {
     catalog: string;
     sell: string;
     order: string;
+    cart: string;
   };
   hero: {
     title: string;
@@ -50,8 +51,33 @@ export interface Dictionary {
     seller: string;
     district: string;
     buy: string;
+    addToCart: string;
     back: string;
     notFound: string;
+  };
+  cart: {
+    title: string;
+    empty: string;
+    emptyCta: string;
+    total: string;
+    quantity: string;
+    remove: string;
+    clear: string;
+    payStripe: string;
+    payStripeHint: string;
+    payTelegram: string;
+    stripeTestNote: string;
+    stripeNotConfigured: string;
+    processing: string;
+    continueShopping: string;
+  };
+  checkout: {
+    successTitle: string;
+    successText: string;
+    cancelTitle: string;
+    cancelText: string;
+    backToCart: string;
+    backHome: string;
   };
   sell: {
     title: string;

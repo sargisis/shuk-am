@@ -1,20 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { useLocale } from "@/components/providers/LocaleProvider";
-import { TELEGRAM_URL } from "@/lib/constants";
 import { formatPrice } from "@/lib/format";
 import type { Product } from "@/types";
 import { ButtonLink } from "@/components/ui/Button";
 
 export function ProductDetail({ product }: { product: Product }) {
   const { locale, t } = useLocale();
-
-  const orderMessage = encodeURIComponent(
-    locale === "hy"
-      ? `Բարև! Ուզում եմ պատվիրել՝ ${product.name.hy} (${formatPrice(product.price, locale)} ֏)`
-      : `Здравствуйте! Хочу заказать: ${product.name.ru} (${formatPrice(product.price, locale)} ֏)`,
-  );
 
   return (
     <article className="grid gap-8 lg:grid-cols-2">
@@ -53,12 +47,9 @@ export function ProductDetail({ product }: { product: Product }) {
           </div>
         </dl>
         <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink
-            href={`${TELEGRAM_URL}?text=${orderMessage}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t.product.buy}
+          <AddToCartButton productId={product.id} />
+          <ButtonLink href="/cart" variant="primary">
+            {t.nav.cart}
           </ButtonLink>
           <ButtonLink href="/catalog" variant="outline">
             {t.product.back}

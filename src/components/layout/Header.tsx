@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCart } from "@/components/providers/CartProvider";
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
@@ -14,6 +15,7 @@ const links = [
 export function Header() {
   const pathname = usePathname();
   const { t } = useLocale();
+  const { count, ready } = useCart();
 
   return (
     <header className="sticky top-0 z-50 border-b border-gold/30 bg-cream/95 backdrop-blur-md">
@@ -50,10 +52,15 @@ export function Header() {
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
           <Link
-            href="/catalog"
-            className="hidden rounded-xl bg-terracotta px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-terracotta-dark sm:inline-flex"
+            href="/cart"
+            className="relative rounded-xl border border-gold/40 bg-white px-3 py-2 text-sm font-semibold text-ink transition-colors hover:border-terracotta/40 sm:px-4"
           >
-            {t.nav.order}
+            {t.nav.cart}
+            {ready && count > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-terracotta px-1 text-xs text-white">
+                {count > 99 ? "99+" : count}
+              </span>
+            )}
           </Link>
         </div>
       </div>
