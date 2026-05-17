@@ -1,9 +1,10 @@
 import { AccountView } from "@/components/account/AccountView";
+import { PageContainer } from "@/components/layout/PageContainer";
 
 export default function AccountPage() {
   return (
-    <div className="px-4 py-10 sm:px-6">
+    <PageContainer>
       <AccountView />
-    </div>
+    </PageContainer>
   );
 }

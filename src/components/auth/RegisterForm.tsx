@@ -48,7 +48,9 @@ export function RegisterForm() {
       onSubmit={handleSubmit}
       className="surface-card-elevated mx-auto max-w-md space-y-4 p-8 sm:p-10"
     >
-      <h1 className="text-2xl font-bold text-ink">{t.auth.registerTitle}</h1>
+      <h1 className="font-display text-2xl font-semibold text-ink">
+        {t.auth.registerTitle}
+      </h1>
       <p className="text-sm text-ink-muted">{t.auth.demoNote}</p>
       {error && (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">

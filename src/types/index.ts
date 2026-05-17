@@ -59,6 +59,7 @@ export interface Order {
   buyerId: string;
   buyerEmail: string;
   buyerName: string;
+  buyerPhone?: string;
   items: OrderItem[];
   totalAmd: number;
   status: OrderStatus;

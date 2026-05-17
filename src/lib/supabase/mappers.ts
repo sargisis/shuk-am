@@ -49,6 +49,7 @@ export type OrderRow = {
   buyer_id: string | null;
   buyer_email: string;
   buyer_name: string;
+  buyer_phone?: string | null;
   total_amd: number;
   status: OrderStatus;
   payment_method: PaymentMethod;
@@ -111,6 +112,7 @@ export function mapOrder(row: OrderRow, items: OrderItemRow[]): Order {
     buyerId: row.buyer_id ?? "guest",
     buyerEmail: row.buyer_email,
     buyerName: row.buyer_name,
+    buyerPhone: row.buyer_phone ?? undefined,
     totalAmd: row.total_amd,
     status: row.status,
     paymentMethod: row.payment_method,

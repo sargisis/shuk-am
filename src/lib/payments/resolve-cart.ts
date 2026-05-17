@@ -32,12 +32,24 @@ export function cartTotalAmd(lines: ResolvedCartLine[]) {
   return lines.reduce((sum, line) => sum + line.lineTotalAmd, 0);
 }
 
+export interface OrderContact {
+  name: string;
+  email: string;
+  phone?: string;
+}
+
 export function buildTelegramOrderMessage(
   lines: ResolvedCartLine[],
   locale: Locale,
+  contact?: OrderContact,
 ): string {
   const header =
     locale === "hy" ? "Պատվեր Shuk.am" : "Заказ Shuk.am";
+  const contactBlock = contact
+    ? locale === "hy"
+      ? `\n👤 ${contact.name}\n✉ ${contact.email}${contact.phone ? `\n📞 ${contact.phone}` : ""}\n`
+      : `\n👤 ${contact.name}\n✉ ${contact.email}${contact.phone ? `\n📞 ${contact.phone}` : ""}\n`
+    : "";
   const body = lines
     .map((line) => {
       const name = line.product.name[locale];
@@ -49,5 +61,5 @@ export function buildTelegramOrderMessage(
     locale === "hy"
       ? `\nԸնդամենը: ${total} ֏`
       : `\nИтого: ${total} ֏`;
-  return `${header}\n\n${body}${footer}`;
+  return `${header}${contactBlock}\n${body}${footer}`;
 }

@@ -10,6 +10,7 @@ export async function createSupabaseOrder(
     paymentMethod: PaymentMethod;
     buyerName?: string;
     buyerEmail?: string;
+    buyerPhone?: string;
   },
 ): Promise<{ orderId: string }> {
   const supabase = await createClient();
@@ -41,6 +42,7 @@ export async function createSupabaseOrder(
       buyer_id: authUser?.id ?? null,
       buyer_email: profileEmail,
       buyer_name: profileName,
+      buyer_phone: options.buyerPhone?.trim() || null,
       total_amd: totalAmd,
       status: "pending",
       payment_method: options.paymentMethod,

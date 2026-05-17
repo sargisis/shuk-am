@@ -150,6 +150,8 @@ export interface Dictionary {
     stripeNotConfigured: string;
     processing: string;
     continueShopping: string;
+    contactTitle: string;
+    contactHint: string;
   };
   checkout: {
     successTitle: string;

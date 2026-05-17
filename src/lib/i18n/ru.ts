@@ -96,6 +96,10 @@ const ru: Dictionary = {
     email_exists: "Этот email уже зарегистрирован",
     invalid_login: "Неверный email или пароль",
     confirm_email: "Подтвердите email по ссылке из письма, затем войдите",
+    invalid_name: "Укажите имя",
+    invalid_email: "Некорректный email",
+    invalid_phone: "Укажите телефон",
+    order_failed: "Не удалось оформить заказ. Попробуйте снова",
   },
   hero: {
     title: "Армянский рынок — у вас дома",
@@ -171,6 +175,8 @@ const ru: Dictionary = {
       "Добавьте ключи Stripe в .env.local (см. README)",
     processing: "Загрузка…",
     continueShopping: "Продолжить покупки",
+    contactTitle: "Контакты для заказа",
+    contactHint: "Мы свяжемся для подтверждения",
   },
   checkout: {
     successTitle: "Спасибо за заказ",

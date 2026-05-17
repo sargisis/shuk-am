@@ -1,9 +1,10 @@
 import { RegisterForm } from "@/components/auth/RegisterForm";
+import { PageContainer } from "@/components/layout/PageContainer";
 
 export default function RegisterPage() {
   return (
-    <div className="px-4 py-10 sm:px-6">
+    <PageContainer narrow>
       <RegisterForm />
-    </div>
+    </PageContainer>
   );
 }

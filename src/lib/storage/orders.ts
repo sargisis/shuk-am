@@ -15,6 +15,7 @@ export function createOrder(input: {
   buyerId: string;
   buyerEmail: string;
   buyerName: string;
+  buyerPhone?: string;
   lines: ResolvedCartLine[];
   paymentMethod: PaymentMethod;
   status?: OrderStatus;
@@ -31,6 +32,7 @@ export function createOrder(input: {
     buyerId: input.buyerId,
     buyerEmail: input.buyerEmail,
     buyerName: input.buyerName,
+    buyerPhone: input.buyerPhone,
     items,
     totalAmd: input.lines.reduce((s, l) => s + l.lineTotalAmd, 0),
     status: input.status ?? "pending",

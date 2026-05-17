@@ -1,9 +1,10 @@
 import { LoginForm } from "@/components/auth/LoginForm";
+import { PageContainer } from "@/components/layout/PageContainer";
 
 export default function LoginPage() {
   return (
-    <div className="px-4 py-10 sm:px-6">
+    <PageContainer narrow>
       <LoginForm />
-    </div>
+    </PageContainer>
   );
 }

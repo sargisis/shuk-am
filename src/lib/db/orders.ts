@@ -75,6 +75,7 @@ export async function createOrderLocal(input: {
   buyerId: string;
   buyerEmail: string;
   buyerName: string;
+  buyerPhone?: string;
   lines: ResolvedCartLine[];
   paymentMethod: PaymentMethod;
   status?: OrderStatus;

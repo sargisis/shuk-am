@@ -25,6 +25,7 @@ function getStripe(): Stripe {
 export async function createStripeCheckoutSession(
   lines: ResolvedCartLine[],
   locale: Locale,
+  orderId?: string,
 ): Promise<string> {
   const stripe = getStripe();
   const siteUrl = getSiteUrl();
@@ -47,6 +48,7 @@ export async function createStripeCheckoutSession(
     })),
     metadata: {
       source: "shuk-am",
+      order_id: orderId ?? "",
       product_ids: lines.map((l) => l.product.id).join(","),
     },
     success_url: `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,

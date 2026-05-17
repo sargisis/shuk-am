@@ -89,14 +89,24 @@ Or paste supabase/schema.sql into Supabase SQL Editor manually.
   }
 
   const ref = url.replace(/^https?:\/\//, "").split(".")[0];
-  const sql = readFileSync(join(root, "supabase/schema.sql"), "utf8");
+  const migrationFiles = [
+    "supabase/migrations/001_initial.sql",
+    "supabase/migrations/002_policies.sql",
+    "supabase/migrations/003_order_buyer_phone.sql",
+  ];
 
   console.log("Connecting to Supabase Postgres…");
   const client = await tryConnect(buildUrls(ref, password));
 
   try {
-    console.log("Applying schema + seed…");
-    await client.query(sql);
+    for (const file of migrationFiles) {
+      const path = join(root, file);
+      if (!existsSync(path)) continue;
+      console.log(`→ ${file}…`);
+      await client.query(readFileSync(path, "utf8"));
+    }
+    console.log("→ supabase/seed.sql…");
+    await client.query(readFileSync(join(root, "supabase/seed.sql"), "utf8"));
     console.log("✓ Database ready. Restart: npm run dev");
   } catch (err) {
     console.error("Failed:", err.message);

@@ -17,8 +17,8 @@ export function ProductDetail({ product }: { product: Product }) {
   const seller = getSellerBySlugStatic(product.sellerId);
 
   return (
-    <article className="grid gap-8 lg:grid-cols-2">
-      <div className="relative aspect-square overflow-hidden rounded-3xl bg-wheat">
+    <article className="grid gap-10 lg:grid-cols-2 lg:gap-12">
+      <div className="relative aspect-square overflow-hidden rounded-[2rem] bg-wheat shadow-[var(--shadow-card)] ring-1 ring-gold/20">
         <Image
           src={product.image}
           alt={product.name[locale]}
@@ -28,23 +28,23 @@ export function ProductDetail({ product }: { product: Product }) {
           priority
         />
       </div>
-      <div>
-        <span className="inline-block rounded-lg bg-terracotta/10 px-2.5 py-1 text-xs font-semibold text-terracotta">
+      <div className="flex flex-col">
+        <span className="inline-flex w-fit rounded-full bg-terracotta/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-terracotta">
           {t.categoryLabels[product.category]}
         </span>
-        <h1 className="mt-3 text-3xl font-bold text-ink">
+        <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
           {product.name[locale]}
         </h1>
-        <p className="mt-4 text-ink-muted leading-relaxed">
+        <p className="mt-5 text-lg leading-relaxed text-ink-muted">
           {product.description[locale]}
         </p>
-        <p className="mt-6 text-3xl font-bold text-terracotta">
+        <p className="mt-8 font-display text-4xl font-semibold text-terracotta">
           {formatPrice(product.price, locale)}{" "}
-          <span className="text-lg font-normal text-ink-muted">֏</span>
+          <span className="text-xl font-sans font-normal text-ink-muted">֏</span>
         </p>
-        <dl className="mt-6 space-y-2 text-sm">
+        <dl className="mt-8 space-y-3 rounded-2xl border border-gold/25 bg-cream/50 p-5 text-sm">
           <div className="flex gap-2">
-            <dt className="text-ink-muted">{t.product.seller}:</dt>
+            <dt className="min-w-24 text-ink-muted">{t.product.seller}:</dt>
             <dd className="font-medium text-ink">
               {seller ? (
                 <Link
@@ -59,7 +59,7 @@ export function ProductDetail({ product }: { product: Product }) {
             </dd>
           </div>
           <div className="flex gap-2">
-            <dt className="text-ink-muted">{t.product.district}:</dt>
+            <dt className="min-w-24 text-ink-muted">{t.product.district}:</dt>
             <dd className="font-medium text-ink">{product.district}</dd>
           </div>
         </dl>

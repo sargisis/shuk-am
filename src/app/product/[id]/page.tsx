@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/product/ProductDetail";
+import { PageContainer } from "@/components/layout/PageContainer";
 import { getProductByIdStatic, getProductIds } from "@/lib/products";
 
 export function generateStaticParams() {
@@ -19,8 +20,8 @@ export default async function ProductPage({
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <PageContainer>
       <ProductDetail product={product} />
-    </div>
+    </PageContainer>
   );
 }

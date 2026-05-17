@@ -38,7 +38,7 @@ export function SellerProfileView({ slug }: { slug: string }) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-6 rounded-3xl border border-gold/25 bg-white p-6 sm:flex-row sm:items-center">
+      <div className="surface-card-elevated flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
         <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-wheat">
           <Image
             src={seller.image}
@@ -48,7 +48,7 @@ export function SellerProfileView({ slug }: { slug: string }) {
           />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-ink">
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-ink">
             {getSellerDisplayName(seller, locale)}
           </h1>
           <p className="mt-1 text-ink-muted">{seller.district}</p>

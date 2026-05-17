@@ -96,6 +96,10 @@ const hy: Dictionary = {
     email_exists: "Այս email-ը արդեն գրանցված է",
     invalid_login: "Սխալ email կամ գաղտնաբառ",
     confirm_email: "Հաստատեք email-ը նամակում, ապա մուտք գործեք",
+    invalid_name: "Մուտքագրեք անունը",
+    invalid_email: "Սխալ email",
+    invalid_phone: "Մուտքագրեք հեռախոսահամարը",
+    order_failed: "Պատվերը չհաջողվեց։ Կրկին փորձեք",
   },
   hero: {
     title: "Հայկական շուկան՝ ձեր տանը",
@@ -171,6 +175,8 @@ const hy: Dictionary = {
       "Ավելացրեք Stripe բանալիները .env.local-ում (տես README)",
     processing: "Բեռնվում է…",
     continueShopping: "Շարունակել գնումները",
+    contactTitle: "Կոնտակտ պատվերի համար",
+    contactHint: "Մենք կկապվենք հաստատման համար",
   },
   checkout: {
     successTitle: "Շնորհավորում ենք",
