@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProvider";
 import { useCart } from "@/components/providers/CartProvider";
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -15,7 +16,8 @@ const links = [
 export function Header() {
   const pathname = usePathname();
   const { t } = useLocale();
-  const { count, ready } = useCart();
+  const { user, ready: authReady, logout } = useAuth();
+  const { count, ready: cartReady } = useCart();
 
   return (
     <header className="sticky top-0 z-50 border-b border-gold/30 bg-cream/95 backdrop-blur-md">
@@ -51,12 +53,37 @@ export function Header() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
+          {authReady && user && (
+            <>
+              <Link
+                href={user.role === "seller" ? "/seller/dashboard" : "/account"}
+                className="hidden text-sm font-medium text-ink-muted hover:text-terracotta sm:inline"
+              >
+                {user.role === "seller" ? t.nav.dashboard : t.nav.account}
+              </Link>
+              <button
+                type="button"
+                onClick={() => logout()}
+                className="hidden text-sm text-ink-muted hover:text-ink sm:inline"
+              >
+                {t.nav.logout}
+              </button>
+            </>
+          )}
+          {authReady && !user && (
+            <Link
+              href="/login"
+              className="hidden text-sm font-medium text-terracotta hover:underline sm:inline"
+            >
+              {t.nav.login}
+            </Link>
+          )}
           <Link
             href="/cart"
             className="relative rounded-xl border border-gold/40 bg-white px-3 py-2 text-sm font-semibold text-ink transition-colors hover:border-terracotta/40 sm:px-4"
           >
             {t.nav.cart}
-            {ready && count > 0 && (
+            {cartReady && count > 0 && (
               <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-terracotta px-1 text-xs text-white">
                 {count > 99 ? "99+" : count}
               </span>

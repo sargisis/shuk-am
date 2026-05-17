@@ -2,11 +2,12 @@
 
 import { ProductCard } from "@/components/product/ProductCard";
 import { useLocale } from "@/components/providers/LocaleProvider";
-import { getFeaturedProducts } from "@/lib/products";
+import { useCatalogProducts } from "@/hooks/useCatalogProducts";
 
 export function PopularProducts() {
   const { t } = useLocale();
-  const products = getFeaturedProducts();
+  const { products } = useCatalogProducts();
+  const featured = products.filter((p) => p.featured);
 
   return (
     <section>
@@ -15,7 +16,7 @@ export function PopularProducts() {
         <p className="mt-1 text-ink-muted">{t.popular.subtitle}</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {products.map((product) => (
+        {featured.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

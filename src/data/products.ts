@@ -1,6 +1,5 @@
 import type { Product } from "@/types";
 
-/** Stable demo images (picsum.photos seeds — no broken Unsplash IDs). */
 function productImage(seed: string) {
   return `https://picsum.photos/seed/shuk-${seed}/800/600`;
 }
@@ -8,11 +7,11 @@ function productImage(seed: string) {
 export const products: Product[] = [
   {
     id: "honey-garni",
+    sellerId: "ani",
     category: "food",
     price: 4500,
     district: "Գառնի",
     image: productImage("honey"),
-    seller: "Անի",
     featured: true,
     name: { hy: "Բնական մեղր", ru: "Натуральный мёд" },
     description: {
@@ -22,11 +21,11 @@ export const products: Product[] = [
   },
   {
     id: "lavash-traditional",
+    sellerId: "mariam",
     category: "food",
     price: 800,
     district: "Երևան",
     image: productImage("lavash"),
-    seller: "Մարիամ",
     featured: true,
     name: { hy: "Լավաշ տնային", ru: "Домашний лаваш" },
     description: {
@@ -36,11 +35,11 @@ export const products: Product[] = [
   },
   {
     id: "ceramic-bowl",
+    sellerId: "armen",
     category: "crafts",
     price: 12000,
     district: "Գյումրի",
     image: productImage("ceramic"),
-    seller: "Արմեն",
     featured: true,
     name: { hy: "Կերամիկայի կուժ", ru: "Керамическая чаша" },
     description: {
@@ -50,11 +49,11 @@ export const products: Product[] = [
   },
   {
     id: "silver-bracelet",
+    sellerId: "lilit",
     category: "crafts",
     price: 28000,
     district: "Երևան",
     image: productImage("bracelet"),
-    seller: "Լիլիթ",
     featured: true,
     name: { hy: "Արծաթե թևնոց", ru: "Серебряный браслет" },
     description: {
@@ -64,11 +63,11 @@ export const products: Product[] = [
   },
   {
     id: "knit-sweater",
+    sellerId: "nare",
     category: "clothing",
     price: 35000,
     district: "Դիլիջան",
     image: productImage("sweater"),
-    seller: "Նարե",
     name: { hy: "Ձեռքով կարած զգավեստ", ru: "Вязаный свитер" },
     description: {
       hy: "100% բուրդ, չափ M",
@@ -77,11 +76,11 @@ export const products: Product[] = [
   },
   {
     id: "national-scarf",
+    sellerId: "sona",
     category: "clothing",
     price: 15000,
     district: "Երևան",
     image: productImage("scarf"),
-    seller: "Սոնա",
     name: { hy: "Ազգային շալ", ru: "Национальный шарф" },
     description: {
       hy: "Վուշի գույներ, մեղմ բամբակ",
@@ -90,11 +89,11 @@ export const products: Product[] = [
   },
   {
     id: "clay-pot",
+    sellerId: "hakob",
     category: "home",
     price: 8500,
     district: "Աշտարակ",
     image: productImage("clay-pot"),
-    seller: "Հակոբ",
     name: { hy: "Կավի կուժ", ru: "Глиняный горшок" },
     description: {
       hy: "Բնական կավ, կերամիկայի համար",
@@ -103,11 +102,11 @@ export const products: Product[] = [
   },
   {
     id: "dried-fruits",
+    sellerId: "gayane",
     category: "food",
     price: 3200,
     district: "Արարատ",
     image: productImage("dried-fruits"),
-    seller: "Գայանե",
     name: { hy: "Չրերի հավաքածու", ru: "Набор сухофруктов" },
     description: {
       hy: "Ճիշտ, տանձ, սալոր — 400 գ",

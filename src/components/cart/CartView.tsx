@@ -3,8 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/components/providers/AuthProvider";
 import { useCart } from "@/components/providers/CartProvider";
 import { useLocale } from "@/components/providers/LocaleProvider";
+import { createOrder } from "@/lib/storage/orders";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/format";
 import { resolveCartItems, cartTotalAmd } from "@/lib/payments/resolve-cart";
@@ -12,6 +14,7 @@ import type { PaymentProviderId } from "@/types/cart";
 
 export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
   const { items, setQuantity, removeItem, clearCart, ready } = useCart();
+  const { user } = useAuth();
   const { locale, t } = useLocale();
   const [loading, setLoading] = useState<PaymentProviderId | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,10 +30,24 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
   const lines = resolveCartItems(items);
   const total = cartTotalAmd(lines);
 
+  function saveOrder(method: PaymentProviderId, status: "pending" | "paid") {
+    const order = createOrder({
+      buyerId: user?.id ?? "guest",
+      buyerEmail: user?.email ?? "guest@shuk.am",
+      buyerName: user?.name ?? "Guest",
+      lines,
+      paymentMethod: method,
+      status,
+    });
+    sessionStorage.setItem("shuk-last-order", order.id);
+    return order.id;
+  }
+
   async function checkout(provider: PaymentProviderId) {
     setLoading(provider);
     setError(null);
     try {
+      saveOrder(provider, "pending");
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

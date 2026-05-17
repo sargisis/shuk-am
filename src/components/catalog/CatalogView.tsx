@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/product/ProductCard";
 import { useLocale } from "@/components/providers/LocaleProvider";
-import { filterProducts } from "@/lib/products";
+import { useCatalogProducts } from "@/hooks/useCatalogProducts";
 import type { Category } from "@/types";
 
 const categories: (Category | "")[] = ["", "food", "crafts", "clothing", "home"];
@@ -20,15 +20,21 @@ export function CatalogView() {
   const [maxPrice, setMaxPrice] = useState("");
   const [district, setDistrict] = useState("");
 
-  const filtered = useMemo(
-    () =>
-      filterProducts({
-        category: category || null,
-        maxPrice: maxPrice ? Number(maxPrice) : null,
-        district: district || null,
-      }),
-    [category, maxPrice, district],
-  );
+  const { products } = useCatalogProducts();
+
+  const filtered = useMemo(() => {
+    return products.filter((p) => {
+      if (category && p.category !== category) return false;
+      if (maxPrice && p.price > Number(maxPrice)) return false;
+      if (
+        district &&
+        !p.district.toLowerCase().includes(district.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
+    });
+  }, [products, category, maxPrice, district]);
 
   const reset = () => {
     setCategory("");
