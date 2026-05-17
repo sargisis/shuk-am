@@ -3,6 +3,7 @@
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { TELEGRAM_URL } from "@/lib/constants";
 import { ButtonLink } from "@/components/ui/Button";
+import { SellerApplicationForm } from "./SellerApplicationForm";
 
 export function SellPage() {
   const { t } = useLocale();
@@ -31,6 +32,7 @@ export function SellPage() {
             {t.sell.cta}
           </ButtonLink>
         </div>
+        <SellerApplicationForm />
         <p className="mt-6 text-sm text-ink-muted">
           {t.sell.formNote}
           <br />

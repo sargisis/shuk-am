@@ -20,12 +20,30 @@ export function Footer() {
               {t.footer.tagline}
             </p>
           </div>
-          <div className="flex flex-col gap-2 text-sm">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm sm:grid-cols-1">
             <Link
               href="/catalog"
               className="text-cream/80 hover:text-gold transition-colors"
             >
               {t.nav.catalog}
+            </Link>
+            <Link
+              href="/how-to-order"
+              className="text-cream/80 hover:text-gold transition-colors"
+            >
+              {t.nav.howToOrder}
+            </Link>
+            <Link
+              href="/delivery"
+              className="text-cream/80 hover:text-gold transition-colors"
+            >
+              {t.nav.delivery}
+            </Link>
+            <Link
+              href="/about"
+              className="text-cream/80 hover:text-gold transition-colors"
+            >
+              {t.nav.about}
             </Link>
             <Link
               href="/sell"

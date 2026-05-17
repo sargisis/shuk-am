@@ -1,3 +1,4 @@
+import { products } from "@/data/products";
 import { getProductById } from "@/lib/products";
 import type { CartItem } from "@/types/cart";
 import type { Locale, Product } from "@/types";
@@ -13,7 +14,9 @@ export function resolveCartItems(items: CartItem[]): ResolvedCartLine[] {
 
   for (const item of items) {
     if (!item.productId || item.quantity < 1 || item.quantity > 99) continue;
-    const product = getProductById(item.productId);
+    const product =
+      getProductById(item.productId) ??
+      products.find((p) => p.id === item.productId);
     if (!product) continue;
     lines.push({
       product,

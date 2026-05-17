@@ -1,14 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { formatPrice } from "@/lib/format";
+import { getSellerById, getSellerDisplayName } from "@/lib/sellers";
 import type { Product } from "@/types";
 import { ButtonLink } from "@/components/ui/Button";
 
 export function ProductDetail({ product }: { product: Product }) {
   const { locale, t } = useLocale();
+  const seller = getSellerById(product.sellerId);
 
   return (
     <article className="grid gap-8 lg:grid-cols-2">
@@ -39,7 +42,18 @@ export function ProductDetail({ product }: { product: Product }) {
         <dl className="mt-6 space-y-2 text-sm">
           <div className="flex gap-2">
             <dt className="text-ink-muted">{t.product.seller}:</dt>
-            <dd className="font-medium text-ink">{product.seller}</dd>
+            <dd className="font-medium text-ink">
+              {seller ? (
+                <Link
+                  href={`/seller/${seller.slug}`}
+                  className="text-terracotta hover:underline"
+                >
+                  {getSellerDisplayName(seller, locale)}
+                </Link>
+              ) : (
+                product.sellerId
+              )}
+            </dd>
           </div>
           <div className="flex gap-2">
             <dt className="text-ink-muted">{t.product.district}:</dt>

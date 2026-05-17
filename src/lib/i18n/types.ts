@@ -11,7 +11,87 @@ export interface Dictionary {
     sell: string;
     order: string;
     cart: string;
+    login: string;
+    account: string;
+    dashboard: string;
+    logout: string;
+    about: string;
+    delivery: string;
+    howToOrder: string;
   };
+  auth: {
+    loginTitle: string;
+    registerTitle: string;
+    email: string;
+    password: string;
+    name: string;
+    phone: string;
+    shopName: string;
+    roleBuyer: string;
+    roleSeller: string;
+    submitLogin: string;
+    submitRegister: string;
+    noAccount: string;
+    hasAccount: string;
+    demoNote: string;
+  };
+  account: {
+    title: string;
+    profile: string;
+    orders: string;
+    noOrders: string;
+    orderId: string;
+    status: string;
+  };
+  seller: {
+    dashboardTitle: string;
+    tabProducts: string;
+    tabOrders: string;
+    tabStats: string;
+    addProduct: string;
+    editProduct: string;
+    delete: string;
+    save: string;
+    statsProducts: string;
+    statsOrders: string;
+    statsRevenue: string;
+    viewShop: string;
+    noProducts: string;
+    noOrders: string;
+    productNameHy: string;
+    productNameRu: string;
+    productDescHy: string;
+    productDescRu: string;
+    price: string;
+    category: string;
+    imageUrl: string;
+    district: string;
+  };
+  pages: {
+    aboutTitle: string;
+    aboutText: string;
+    deliveryTitle: string;
+    deliveryText: string;
+    howToOrderTitle: string;
+    howToOrderSteps: string[];
+  };
+  sell: {
+    title: string;
+    subtitle: string;
+    benefits: string[];
+    cta: string;
+    formNote: string;
+    telegram: string;
+    formTitle: string;
+    formSubmit: string;
+    formSuccess: string;
+    message: string;
+  };
+  orderStatus: Record<
+    import("@/types").OrderStatus,
+    string
+  >;
+  errors: Record<string, string>;
   hero: {
     title: string;
     subtitle: string;
@@ -78,14 +158,6 @@ export interface Dictionary {
     cancelText: string;
     backToCart: string;
     backHome: string;
-  };
-  sell: {
-    title: string;
-    subtitle: string;
-    benefits: string[];
-    cta: string;
-    formNote: string;
-    telegram: string;
   };
   footer: {
     tagline: string;
