@@ -95,6 +95,7 @@ const hy: Dictionary = {
     invalid_credentials: "Լրացրեք բոլոր դաշտերը",
     email_exists: "Այս email-ը արդեն գրանցված է",
     invalid_login: "Սխալ email կամ գաղտնաբառ",
+    confirm_email: "Հաստատեք email-ը նամակում, ապա մուտք գործեք",
   },
   hero: {
     title: "Հայկական շուկան՝ ձեր տանը",

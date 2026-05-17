@@ -16,7 +16,12 @@
 - `/about`, `/delivery`, `/how-to-order` — инфо
 - `/checkout/success` | `/cancel` — после оплаты
 
-Данные пока в **localStorage** (демо до PostgreSQL). Платёжные провайдеры (ArCa / IDram) — позже.
+**Два режима данных:**
+
+- Без Supabase — демо в **localStorage** (как раньше).
+- С Supabase — PostgreSQL + Auth (регистрация, заказы, каталог из БД).
+
+Платёжные провайдеры (ArCa / IDram) — позже; при включённом Supabase в корзине только **Telegram**.
 
 Языки: **հայերեն** / **русский** (переключатель в шапке).
 
@@ -37,16 +42,27 @@ npm run dev
 
 Скопируйте `.env.example` → `.env.local`.
 
-```env
-NEXT_PUBLIC_TELEGRAM_URL=https://t.me/your_channel
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+См. `.env.example` → скопируйте в `.env.local`.
 
-# Stripe TEST (опционально)
-STRIPE_SECRET_KEY=sk_test_...
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
-STRIPE_CURRENCY=usd
-STRIPE_AMD_PER_USD=400
+### Supabase (рекомендуется для v2)
+
+1. Создайте проект на [supabase.com](https://supabase.com).
+2. **SQL Editor** → выполните `supabase/migrations/001_initial.sql`, затем `supabase/seed.sql` (демо-продавцы и товары).
+3. **Settings → API** → скопируйте URL и `anon` key в `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
+
+4. **Authentication → Providers** → включите Email (в dev можно отключить подтверждение email).
+5. Создайте таблицы — один из способов:
+   - **Авто:** добавьте в `.env.local` пароль БД `SUPABASE_DB_PASSWORD=...` (Project Settings → Database) и выполните `npm run db:setup`
+   - **Вручную:** SQL Editor → вставьте содержимое `supabase/schema.sql` → Run
+6. Проверка: `curl http://localhost:3000/api/health` → `"schemaReady": true`
+7. Перезапустите `npm run dev`
+
+Пока таблицы не созданы, сайт автоматически работает в режиме localStorage (демо).
 
 ### Stripe test
 
@@ -60,11 +76,9 @@ STRIPE_AMD_PER_USD=400
 
 Позже провайдер меняется в `src/lib/payments/` (добавить ArCa / IDram), UI корзины остаётся.
 
-## Дальше (v2)
+## Дальше
 
-- API + PostgreSQL
 - Оплата ArCa / IDram (вместо или вместе со Stripe)
-- Кабинет продавца
 - React Native приложение на том же API
 
 ## Товары

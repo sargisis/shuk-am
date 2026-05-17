@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLocale } from "@/components/providers/LocaleProvider";
-import { submitApplication } from "@/lib/storage/applications";
+import { submitApplication } from "@/lib/db/applications";
 import { Button } from "@/components/ui/Button";
 import type { Category } from "@/types";
 
@@ -15,9 +15,9 @@ export function SellerApplicationForm() {
   const [category, setCategory] = useState<Category>("crafts");
   const [message, setMessage] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    submitApplication({ name, email, phone, category, message });
+    await submitApplication({ name, email, phone, category, message });
     setDone(true);
   }
 

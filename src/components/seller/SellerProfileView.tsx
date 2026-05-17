@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/product/ProductCard";
 import { useLocale } from "@/components/providers/LocaleProvider";
-import { getProductsBySellerId } from "@/lib/products";
-import { getSellerBySlug, getSellerDisplayName } from "@/lib/sellers";
+import { fetchProductsBySellerId } from "@/lib/db/products";
+import { fetchSellerBySlug } from "@/lib/db/sellers";
+import { getSellerDisplayName } from "@/lib/sellers";
 import type { Product, Seller } from "@/types";
 import Image from "next/image";
 
@@ -14,9 +15,19 @@ export function SellerProfileView({ slug }: { slug: string }) {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const s = getSellerBySlug(slug);
-    setSeller(s ?? null);
-    if (s) setProducts(getProductsBySellerId(s.id));
+    let cancelled = false;
+    (async () => {
+      const s = await fetchSellerBySlug(slug);
+      if (cancelled) return;
+      setSeller(s ?? null);
+      if (s) {
+        const list = await fetchProductsBySellerId(s.id);
+        if (!cancelled) setProducts(list);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   if (!seller) {

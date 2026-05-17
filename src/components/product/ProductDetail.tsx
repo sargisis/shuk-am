@@ -5,13 +5,16 @@ import Link from "next/link";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { formatPrice } from "@/lib/format";
-import { getSellerById, getSellerDisplayName } from "@/lib/sellers";
+import {
+  getSellerBySlugStatic,
+  getSellerDisplayName,
+} from "@/lib/sellers";
 import type { Product } from "@/types";
 import { ButtonLink } from "@/components/ui/Button";
 
 export function ProductDetail({ product }: { product: Product }) {
   const { locale, t } = useLocale();
-  const seller = getSellerById(product.sellerId);
+  const seller = getSellerBySlugStatic(product.sellerId);
 
   return (
     <article className="grid gap-8 lg:grid-cols-2">

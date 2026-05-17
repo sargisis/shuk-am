@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useCart } from "@/components/providers/CartProvider";
 import { useLocale } from "@/components/providers/LocaleProvider";
-import { updateOrderStatus } from "@/lib/storage/orders";
+import { updateOrderStatus } from "@/lib/db/orders";
 import { ButtonLink } from "@/components/ui/Button";
 
 export default function CheckoutSuccessPage() {
@@ -14,7 +14,7 @@ export default function CheckoutSuccessPage() {
   useEffect(() => {
     const orderId = sessionStorage.getItem("shuk-last-order");
     if (orderId) {
-      updateOrderStatus(orderId, "paid");
+      void updateOrderStatus(orderId, "paid");
       sessionStorage.removeItem("shuk-last-order");
     }
     clearCart();

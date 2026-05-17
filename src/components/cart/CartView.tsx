@@ -6,7 +6,8 @@ import { useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useCart } from "@/components/providers/CartProvider";
 import { useLocale } from "@/components/providers/LocaleProvider";
-import { createOrder } from "@/lib/storage/orders";
+import { createOrderLocal } from "@/lib/db/orders";
+import { useSupabaseBackend } from "@/hooks/useSupabaseBackend";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/format";
 import { resolveCartItems, cartTotalAmd } from "@/lib/payments/resolve-cart";
@@ -19,6 +20,9 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
   const [loading, setLoading] = useState<PaymentProviderId | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const { active: useSupabase } = useSupabaseBackend();
+  const showStripe = stripeEnabled && !useSupabase;
+
   if (!ready) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
@@ -30,28 +34,73 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
   const lines = resolveCartItems(items);
   const total = cartTotalAmd(lines);
 
-  function saveOrder(method: PaymentProviderId, status: "pending" | "paid") {
-    const order = createOrder({
-      buyerId: user?.id ?? "guest",
-      buyerEmail: user?.email ?? "guest@shuk.am",
-      buyerName: user?.name ?? "Guest",
-      lines,
-      paymentMethod: method,
-      status,
-    });
-    sessionStorage.setItem("shuk-last-order", order.id);
-    return order.id;
-  }
-
-  async function checkout(provider: PaymentProviderId) {
-    setLoading(provider);
+  async function checkoutTelegram() {
+    setLoading("telegram");
     setError(null);
     try {
-      saveOrder(provider, "pending");
+      if (useSupabase) {
+        const res = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items, locale }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.error ?? "Order failed");
+          return;
+        }
+        if (data.orderId) {
+          sessionStorage.setItem("shuk-last-order", data.orderId);
+        }
+        if (data.telegramUrl) {
+          window.location.href = data.telegramUrl;
+        }
+        return;
+      }
+
+      const order = await createOrderLocal({
+        buyerId: user?.id ?? "guest",
+        buyerEmail: user?.email ?? "guest@shuk.am",
+        buyerName: user?.name ?? "Guest",
+        lines,
+        paymentMethod: "telegram",
+        status: "pending",
+      });
+      sessionStorage.setItem("shuk-last-order", order.id);
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ provider, items, locale }),
+        body: JSON.stringify({ provider: "telegram", items, locale }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch {
+      setError("Network error");
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  async function checkoutStripe() {
+    setLoading("stripe");
+    setError(null);
+    try {
+      const order = await createOrderLocal({
+        buyerId: user?.id ?? "guest",
+        buyerEmail: user?.email ?? "guest@shuk.am",
+        buyerName: user?.name ?? "Guest",
+        lines,
+        paymentMethod: "stripe",
+        status: "pending",
+      });
+      sessionStorage.setItem("shuk-last-order", order.id);
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider: "stripe", items, locale }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -161,7 +210,7 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
           {formatPrice(total, locale)} ֏
         </p>
 
-        {stripeEnabled && (
+        {showStripe && (
           <p className="mt-3 text-xs text-ink-muted">{t.cart.stripeTestNote}</p>
         )}
 
@@ -172,11 +221,11 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
         )}
 
         <div className="mt-6 flex flex-col gap-3">
-          {stripeEnabled && (
+          {showStripe && (
             <Button
               type="button"
               disabled={loading !== null}
-              onClick={() => checkout("stripe")}
+              onClick={checkoutStripe}
               className="w-full"
             >
               {loading === "stripe" ? t.cart.processing : t.cart.payStripe}
@@ -186,7 +235,7 @@ export function CartView({ stripeEnabled }: { stripeEnabled: boolean }) {
             type="button"
             variant="secondary"
             disabled={loading !== null}
-            onClick={() => checkout("telegram")}
+            onClick={checkoutTelegram}
             className="w-full"
           >
             {loading === "telegram" ? t.cart.processing : t.cart.payTelegram}

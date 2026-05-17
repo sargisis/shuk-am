@@ -6,17 +6,18 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/format";
-import { getProductsBySellerId } from "@/lib/products";
-import { generateId } from "@/lib/storage/client";
 import {
-  deleteSellerProduct,
-  getProductsBySellerId as getCustomBySeller,
-  saveSellerProduct,
-} from "@/lib/storage/seller-products";
+  fetchProductsBySellerId,
+  removeProduct as removeDbProduct,
+  upsertProduct,
+} from "@/lib/db/products";
 import {
-  getOrdersForSeller,
+  fetchOrdersForSeller,
   updateOrderStatus,
-} from "@/lib/storage/orders";
+} from "@/lib/db/orders";
+import { isSupabaseBackend } from "@/lib/supabase/ready";
+import { generateId } from "@/lib/storage/client";
+import { getProductsBySellerId as getCustomBySeller } from "@/lib/storage/seller-products";
 import type { Category, Order, OrderStatus, Product } from "@/types";
 import { ButtonLink } from "@/components/ui/Button";
 
@@ -41,17 +42,27 @@ export function SellerDashboard() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [customIds, setCustomIds] = useState<Set<string>>(new Set());
 
   const sellerId = user?.sellerId;
 
-  function reload() {
+  async function reload() {
     if (!sellerId) return;
-    setProducts(getProductsBySellerId(sellerId));
-    setOrders(getOrdersForSeller(sellerId));
+    const [prods, ords] = await Promise.all([
+      fetchProductsBySellerId(sellerId),
+      fetchOrdersForSeller(sellerId),
+    ]);
+    setProducts(prods);
+    setOrders(ords);
+    if (await isSupabaseBackend()) {
+      setCustomIds(new Set(prods.map((p) => p.id)));
+    } else {
+      setCustomIds(new Set(getCustomBySeller(sellerId).map((p) => p.id)));
+    }
   }
 
   useEffect(() => {
-    reload();
+    void reload();
   }, [sellerId]);
 
   const stats = useMemo(() => {
@@ -78,7 +89,7 @@ export function SellerDashboard() {
     );
   }
 
-  function saveProduct(e: React.FormEvent) {
+  async function saveProduct(e: React.FormEvent) {
     e.preventDefault();
     if (!sellerId) return;
     const product: Product = {
@@ -93,10 +104,10 @@ export function SellerDashboard() {
       name: { hy: form.nameHy, ru: form.nameRu },
       description: { hy: form.descHy, ru: form.descRu },
     };
-    saveSellerProduct(product);
+    await upsertProduct(product);
     setForm(emptyForm);
     setEditingId(null);
-    reload();
+    void reload();
   }
 
   function startEdit(p: Product) {
@@ -113,13 +124,11 @@ export function SellerDashboard() {
     });
   }
 
-  function removeProduct(id: string) {
+  async function removeProduct(id: string) {
     if (!sellerId) return;
-    deleteSellerProduct(id, sellerId);
-    reload();
+    await removeDbProduct(id, sellerId);
+    void reload();
   }
-
-  const customIds = new Set(getCustomBySeller(sellerId).map((p) => p.id));
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
@@ -295,12 +304,12 @@ export function SellerDashboard() {
                   <select
                     className="mt-2 rounded-lg border border-gold/40 px-2 py-1"
                     value={order.status}
-                    onChange={(e) => {
-                      updateOrderStatus(
+                    onChange={async (e) => {
+                      await updateOrderStatus(
                         order.id,
                         e.target.value as OrderStatus,
                       );
-                      reload();
+                      void reload();
                     }}
                   >
                     {(

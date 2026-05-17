@@ -19,10 +19,13 @@ export function RegisterForm() {
   const [phone, setPhone] = useState("");
   const [shopName, setShopName] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const result = register({
+    setSubmitting(true);
+    setError(null);
+    const result = await register({
       email,
       password,
       name,
@@ -30,6 +33,7 @@ export function RegisterForm() {
       phone,
       shopName: role === "seller" ? shopName : undefined,
     });
+    setSubmitting(false);
     if (!result.ok) {
       setError(t.errors[result.error] ?? result.error);
       return;
@@ -91,7 +95,7 @@ export function RegisterForm() {
         <input
           type="password"
           required
-          minLength={4}
+          minLength={6}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
@@ -116,8 +120,8 @@ export function RegisterForm() {
           />
         </label>
       )}
-      <Button type="submit" className="w-full">
-        {t.auth.submitRegister}
+      <Button type="submit" className="w-full" disabled={submitting}>
+        {submitting ? t.cart.processing : t.auth.submitRegister}
       </Button>
       <p className="text-center text-sm">
         <Link href="/login" className="text-terracotta hover:underline">

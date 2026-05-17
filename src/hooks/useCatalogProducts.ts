@@ -1,18 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { products as staticProducts } from "@/data/products";
-import { getAllProducts } from "@/lib/products";
+import { fetchAllProducts } from "@/lib/db/products";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { Product } from "@/types";
 
 export function useCatalogProducts() {
   const [products, setProducts] = useState<Product[]>(staticProducts);
+  const [loading, setLoading] = useState(isSupabaseConfigured());
 
-  useEffect(() => {
-    setProducts(getAllProducts());
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    const list = await fetchAllProducts();
+    setProducts(list);
+    setLoading(false);
   }, []);
 
-  const refresh = () => setProducts(getAllProducts());
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
-  return { products, refresh };
+  return { products, loading, refresh };
 }

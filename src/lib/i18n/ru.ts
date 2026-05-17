@@ -95,6 +95,7 @@ const ru: Dictionary = {
     invalid_credentials: "Заполните все поля",
     email_exists: "Этот email уже зарегистрирован",
     invalid_login: "Неверный email или пароль",
+    confirm_email: "Подтвердите email по ссылке из письма, затем войдите",
   },
   hero: {
     title: "Армянский рынок — у вас дома",
