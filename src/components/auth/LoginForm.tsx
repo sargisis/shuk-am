@@ -14,10 +14,14 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const result = login(email, password);
+    setSubmitting(true);
+    setError(null);
+    const result = await login(email, password);
+    setSubmitting(false);
     if (!result.ok) {
       setError(t.errors[result.error] ?? result.error);
       return;
@@ -60,8 +64,8 @@ export function LoginForm() {
           className="mt-1 w-full rounded-xl border border-gold/40 px-3 py-2"
         />
       </label>
-      <Button type="submit" className="w-full">
-        {t.auth.submitLogin}
+      <Button type="submit" className="w-full" disabled={submitting}>
+        {submitting ? t.cart.processing : t.auth.submitLogin}
       </Button>
       <p className="text-center text-sm">
         <Link href="/register" className="text-terracotta hover:underline">

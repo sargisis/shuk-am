@@ -5,12 +5,15 @@ import Link from "next/link";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { formatPrice } from "@/lib/format";
-import { getSellerById, getSellerDisplayName } from "@/lib/sellers";
+import {
+  getSellerBySlugStatic,
+  getSellerDisplayName,
+} from "@/lib/sellers";
 import type { Product } from "@/types";
 
 export function ProductCard({ product }: { product: Product }) {
   const { locale, t } = useLocale();
-  const seller = getSellerById(product.sellerId);
+  const seller = getSellerBySlugStatic(product.sellerId);
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-gold/25 bg-white shadow-sm transition-shadow hover:shadow-md">

@@ -13,13 +13,18 @@ import {
   loginUser,
   logoutUser,
   registerUser,
-} from "@/lib/storage/auth";
+} from "@/lib/db/auth";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/client";
 import type { User, UserRole } from "@/types";
 
 interface AuthContextValue {
   user: User | null;
   ready: boolean;
-  login: (email: string, password: string) => ReturnType<typeof loginUser>;
+  login: (
+    email: string,
+    password: string,
+  ) => Promise<{ ok: true; user: User } | { ok: false; error: string }>;
   register: (input: {
     email: string;
     password: string;
@@ -27,9 +32,9 @@ interface AuthContextValue {
     role: UserRole;
     phone?: string;
     shopName?: string;
-  }) => ReturnType<typeof registerUser>;
-  logout: () => void;
-  refresh: () => void;
+  }) => Promise<{ ok: true; user: User } | { ok: false; error: string }>;
+  logout: () => Promise<void>;
+  refresh: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -38,35 +43,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
 
-  const refresh = useCallback(() => {
-    setUser(getCurrentUser());
+  const refresh = useCallback(async () => {
+    const current = await getCurrentUser();
+    setUser(current);
   }, []);
 
   useEffect(() => {
-    refresh();
-    setReady(true);
+    refresh().finally(() => setReady(true));
+
+    if (!isSupabaseConfigured()) return;
+
+    const supabase = createClient();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      refresh();
+    });
+
+    return () => subscription.unsubscribe();
   }, [refresh]);
 
-  const login = useCallback(
-    (email: string, password: string) => {
-      const result = loginUser(email, password);
-      if (result.ok) setUser(result.user);
-      return result;
-    },
-    [],
-  );
+  const login = useCallback(async (email: string, password: string) => {
+    const result = await loginUser(email, password);
+    if (result.ok) setUser(result.user);
+    return result;
+  }, []);
 
   const register = useCallback(
-    (input: Parameters<AuthContextValue["register"]>[0]) => {
-      const result = registerUser(input);
+    async (input: Parameters<AuthContextValue["register"]>[0]) => {
+      const result = await registerUser(input);
       if (result.ok) setUser(result.user);
       return result;
     },
     [],
   );
 
-  const logout = useCallback(() => {
-    logoutUser();
+  const logout = useCallback(async () => {
+    await logoutUser();
     setUser(null);
   }, []);
 

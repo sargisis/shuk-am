@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { formatPrice } from "@/lib/format";
-import { getOrdersForBuyer } from "@/lib/storage/orders";
+import { fetchOrdersForBuyer } from "@/lib/db/orders";
 import type { Order } from "@/types";
 import { ButtonLink } from "@/components/ui/Button";
 
@@ -15,7 +15,14 @@ export function AccountView() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    if (user) setOrders(getOrdersForBuyer(user.id));
+    if (!user) return;
+    let cancelled = false;
+    fetchOrdersForBuyer(user.id).then((list) => {
+      if (!cancelled) setOrders(list);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [user]);
 
   if (!ready) return null;
